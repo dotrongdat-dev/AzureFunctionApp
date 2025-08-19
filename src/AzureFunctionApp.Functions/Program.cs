@@ -1,3 +1,4 @@
+using AzureFunctionApp.Functions.Configurations;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,10 +8,10 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
-builder.Services
+var services = builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights()
-    .AddSingleton<AzureFunctionApp.Core.Services.Interfaces.IGreeterService, AzureFunctionApp.Core.Services.Implemetations.GreeterService>()
-;
+    .ConfigureFunctionsApplicationInsights();
+
+ConfigureService.Configure(services);    
 
 builder.Build().Run();
