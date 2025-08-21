@@ -26,3 +26,4 @@ E:\Repos\C#\AzureFunctionApp\src\AzureFunctionApp.Core\obj\Debug\net9.0\AzureFun
 E:\Repos\C#\AzureFunctionApp\src\AzureFunctionApp.Core\obj\Debug\net9.0\refint\AzureFunctionApp.Core.dll
 E:\Repos\C#\AzureFunctionApp\src\AzureFunctionApp.Core\obj\Debug\net9.0\AzureFunctionApp.Core.pdb
 E:\Repos\C#\AzureFunctionApp\src\AzureFunctionApp.Core\obj\Debug\net9.0\ref\AzureFunctionApp.Core.dll
+E:\Repos\C#\AzureFunctionApp\src\AzureFunctionApp.Core\obj\Debug\net9.0\AzureFunctionApp.Core.sourcelink.json

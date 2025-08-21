@@ -1,0 +1,52 @@
+# .gitignore for AzureFunctionApp.Infrastructure and solution
+# Ignore build output
+src/AzureFunctionApp.Infrastructure/bin/
+src/AzureFunctionApp.Infrastructure/obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Visual Studio Code settings
+.vscode/
+
+# Ignore NuGet packages
+*.nupkg
+# Ignore build output for Infrastructure and Core
+src/AzureFunctionApp.Infrastructure/bin/
+src/AzureFunctionApp.Infrastructure/obj/
+src/AzureFunctionApp.Core/bin/
+src/AzureFunctionApp.Core/obj/
+
+# Ignore package restore logs
+src/AzureFunctionApp.Infrastructure/project.nuget.cache
+src/AzureFunctionApp.Core/project.nuget.cache
+
+# Ignore other build artifacts
+src/AzureFunctionApp.Infrastructure/**/*.dll
+src/AzureFunctionApp.Infrastructure/**/*.pdb
+src/AzureFunctionApp.Infrastructure/**/*.exe
+src/AzureFunctionApp.Core/**/*.dll
+src/AzureFunctionApp.Core/**/*.pdb
+src/AzureFunctionApp.Core/**/*.exe
+
+# Ignore test results
+TestResults/
+
+# Ignore solution-wide build output
+**/bin/
+**/obj/
+
+**/app.settings.json
+
+# Ignore Rider and JetBrains IDE files
+.idea/
+*.sln.iml
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore Windows system files
+Thumbs.db
