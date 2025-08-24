@@ -1,4 +1,6 @@
+using System.Collections;
 using AzureFunctionApp.Core.Services.Interfaces;
+using AzureFunctionApp.Functions.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -6,18 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace AzureFunctionApp.Functions;
 
-public class GreeterFunction
+public class GreeterFunction(
+    ILogger<GreeterFunction> _logger,
+    IGreeterService _greeterService,
+    SettingHelper _settingHelper
+)
 {
-    private readonly ILogger<GreeterFunction> _logger;
-    private readonly IGreeterService _greeterService;
-
-    public GreeterFunction(
-        ILogger<GreeterFunction> logger,
-        IGreeterService greeterService)
-    {
-        _logger = logger;
-        _greeterService = greeterService;
-    }
 
     [Function("Greeter")]
     public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestData req)
@@ -26,6 +22,7 @@ public class GreeterFunction
         if (string.IsNullOrEmpty(name))
         {
             return new BadRequestObjectResult("Please provide a name in the query string.");
-        }else return new OkObjectResult(_greeterService.Greet(name));
+        }
+        else return new OkObjectResult(_greeterService.Greet(name));
     }
 }

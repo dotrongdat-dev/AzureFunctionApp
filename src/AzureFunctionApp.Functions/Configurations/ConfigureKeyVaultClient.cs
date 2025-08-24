@@ -1,5 +1,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using AzureFunctionApp.Functions.Helpers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AzureFunctionApp.Functions.Configurations;

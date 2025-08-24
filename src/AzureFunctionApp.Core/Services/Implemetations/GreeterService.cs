@@ -1,6 +1,6 @@
 using AzureFunctionApp.Core.Services.Interfaces;
 
-namespace AzureFunctionApp.Core.Services.Implemetations;
+namespace AzureFunctionApp.Core.Services.Implementations;
 
 public class GreeterService : IGreeterService
 {
