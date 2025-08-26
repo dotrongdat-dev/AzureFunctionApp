@@ -25,4 +25,15 @@ public class GreeterFunction(
         }
         else return new OkObjectResult(_greeterService.Greet(name));
     }
+
+    [Function("Settings")]
+    public IActionResult getSettings([HttpTrigger(AuthorizationLevel.Function, "get", Route = "/settings")] HttpRequestData req)
+    {
+        string? key = req.Query["key"];
+        if (string.IsNullOrEmpty(key))
+        {
+            return new BadRequestObjectResult("Please provide a key in the query string.");
+        }
+        return new OkObjectResult(_settingHelper.GetValue<string>(key));
+    }
 }
