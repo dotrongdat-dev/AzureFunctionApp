@@ -27,7 +27,7 @@ public class GreeterFunction(
     }
 
     [Function("Settings")]
-    public IActionResult getSettings([HttpTrigger(AuthorizationLevel.Function, "get", Route = "/settings")] HttpRequestData req)
+    public IActionResult getSettings([HttpTrigger(AuthorizationLevel.Function, "get", Route = "settings")] HttpRequestData req)
     {
         string? key = req.Query["key"];
         if (string.IsNullOrEmpty(key))
