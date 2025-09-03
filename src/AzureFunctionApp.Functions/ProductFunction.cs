@@ -1,6 +1,7 @@
 using System.Net;
 using AzureFunctionApp.Core.Services.Interfaces;
 using AzureFunctionApp.Infrastructure.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -31,7 +32,7 @@ public class ProductFunction(
     [OpenApiParameter(name: "category", Type = typeof(string))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Product),
             Description = "The OK response message containing a JSON result.")]
-    public IActionResult GetProductById([HttpTrigger(AuthorizationLevel.Function, "get", Route = "product/{id}/category/{category}")]
+    public IActionResult GetProductById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "product/{id}/category/{category}")]
             HttpRequestData req,
             string id,
             string category
@@ -40,12 +41,13 @@ public class ProductFunction(
         return new OkObjectResult(productService.GetProductByIdAsync(id, category).GetAwaiter().GetResult());
     }
 
+    [Authorize(Roles = "Employee")]
     [OpenApiOperation(operationId: "AddProduct", Description = "Api for create new product")]
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Product))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Product),
             Description = "The OK response message containing a JSON result.")]
     [Function("AddProduct")]
-    public async Task<IActionResult> AddProduct([HttpTrigger(AuthorizationLevel.Function, "post", Route = "product")]
+    public async Task<IActionResult> AddProduct([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "product")]
             HttpRequestData req
         )
     {
@@ -59,12 +61,13 @@ public class ProductFunction(
         return new CreatedResult($"/product/{product.id}", product);
     }
 
+    [Authorize(Roles = "Employee")]
     [OpenApiOperation(operationId: "UpdateProduct", Description = "Api for update product")]
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Product))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Product),
             Description = "The OK response message containing a JSON result.")]
     [Function("UpdateProduct")]
-    public async Task<IActionResult> UpdateProduct([HttpTrigger(AuthorizationLevel.Function, "put", Route = "product/{id}/category/{category}")]
+    public async Task<IActionResult> UpdateProduct([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "product/{id}/category/{category}")]
             HttpRequestData req,
             string id,
             string category
@@ -83,10 +86,11 @@ public class ProductFunction(
         }));
     }
 
+    [Authorize(Roles = "Employee")]
     [OpenApiOperation(operationId: "DeleteProduct", Description = "Api for delete new product by id")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK,Description = "The OK response message containing a JSON result.")]
     [Function("DeleteProduct")]
-    public IActionResult DeleteProduct([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "product/{id}/category/{category}")]
+    public IActionResult DeleteProduct([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "product/{id}/category/{category}")]
             HttpRequestData req,
             string id,
             string category

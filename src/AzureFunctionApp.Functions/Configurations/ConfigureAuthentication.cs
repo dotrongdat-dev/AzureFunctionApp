@@ -1,9 +1,9 @@
+using AzureFunctionApp.Infrastructure.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Abstractions;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Configurations;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -17,16 +17,18 @@ public class ConfigureAuthentication
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = "https://login.microsoftonline.com/6086a83a-cdae-48c5-985c-0bf5ba575ef3/v2.0";
-                options.Audience = "34c37852-64ec-4b95-80fa-714a50e41b2e";
+                var serviceProvider = services.BuildServiceProvider();
+                var azureTernantConfig = serviceProvider.GetRequiredService<AzureTernantConfig>();
+                options.Authority = azureTernantConfig.GetAuthorityURL();
+                options.Audience = azureTernantConfig.clientId;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "https://login.microsoftonline.com/6086a83a-cdae-48c5-985c-0bf5ba575ef3/v2.0",
-                    ValidAudience = "34c37852-64ec-4b95-80fa-714a50e41b2e"
+                    ValidIssuer = azureTernantConfig.GetAuthorityURL(),
+                    ValidAudience = azureTernantConfig.clientId
                 };
             });
 
