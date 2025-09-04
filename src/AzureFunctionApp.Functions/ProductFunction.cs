@@ -62,6 +62,8 @@ public class ProductFunction(
     }
 
     [Authorize(Roles = "Employee")]
+    [OpenApiParameter(name: "id", Type = typeof(string))]
+    [OpenApiParameter(name: "category", Type = typeof(string))]
     [OpenApiOperation(operationId: "UpdateProduct", Description = "Api for update product")]
     [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(Product))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Product),
@@ -87,6 +89,8 @@ public class ProductFunction(
     }
 
     [Authorize(Roles = "Employee")]
+    [OpenApiParameter(name: "id", Type = typeof(string))]
+    [OpenApiParameter(name: "category", Type = typeof(string))]
     [OpenApiOperation(operationId: "DeleteProduct", Description = "Api for delete new product by id")]
     [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK,Description = "The OK response message containing a JSON result.")]
     [Function("DeleteProduct")]
