@@ -19,7 +19,7 @@ public class SettingHelper
     public T? GetValue<T>(string key)
     {
         // Retrieve the value from the configuration
-        var value = _configuration[key];
+        var value = Environment.GetEnvironmentVariable(key) ?? _configuration[key];
 
         // If the value is null, try to get it from Key Vault
         if (value == null)

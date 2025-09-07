@@ -15,6 +15,7 @@ public class ConfigureService
 
         services.AddSingleton<IGreeterService, GreeterService>();
         services.AddSingleton<IProductService, ProductService>();
+        services.AddSingleton<IDataverseService, DataverseService>();
 
         services.AddSingleton((serviceProvider) =>
         {

@@ -16,6 +16,7 @@ var services = builder.Services
 
 ConfigureKeyVaultClient.Configure(services);
 ConfigureService.Configure(services);
+ConfigureDataverseServiceClient.Configure(services);
 ConfigureCosmosClient.Configure(services);
 ConfigureAuthentication.Configure(services);
 
