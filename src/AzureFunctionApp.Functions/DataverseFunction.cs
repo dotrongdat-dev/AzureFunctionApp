@@ -6,6 +6,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace AzureFunctionApp.Functions;
 
@@ -15,14 +16,14 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	//[Authorize]
 	[OpenApiOperation(operationId: "GetAllDepartments", tags: new[] { "Department" })]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "List all departments.")]
-	[Function("GetAllDepartments")]
+    [Function("GetAllDepartments")]
 	public IActionResult GetAllDepartments([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "departments")] HttpRequestData req)
 		=> new OkObjectResult(_dataverseService.FindAllDepartments());
 
 	//[Authorize]
 	[OpenApiOperation(operationId: "GetDepartmentById", tags: new[] { "Department" })]
 	[OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
-	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "Get department by id.")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "Get department by id.")]
 	[Function("GetDepartmentById")]
 	public IActionResult GetDepartmentById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "department/{id}")] HttpRequestData req, string id)
 		=> new OkObjectResult(_dataverseService.FindDepartmentById(id));
@@ -30,11 +31,14 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	//[Authorize]
 	[OpenApiOperation(operationId: "CreateDepartment", tags: new[] { "Department" })]
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Department create payload")]
-	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "Created department.")]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "Created department.")]
 	[Function("CreateDepartment")]
 	public async Task<IActionResult> CreateDepartment([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "department")] HttpRequestData req)
 	{
-		var data = await req.ReadFromJsonAsync<Dictionary<string, string>>();
+		var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(body);
 		var result = _dataverseService.CreateDepartment(data["id"], data["code"], data["name"]);
 		return new OkObjectResult(result);
 	}
@@ -42,11 +46,14 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	//[Authorize]
 	[OpenApiOperation(operationId: "UpdateDepartment", tags: new[] { "Department" })]
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Department update payload")]
-	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
 	[Function("UpdateDepartment")]
 	public async Task<IActionResult> UpdateDepartment([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "department/{id}")] HttpRequestData req, string id)
 	{
-		var data = await req.ReadFromJsonAsync<Dictionary<string, string>>();
+        var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(body);
 		var result = _dataverseService.UpdateDepartment(id, data["name"]);
 		return new OkObjectResult(result);
 	}
@@ -54,7 +61,9 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	//[Authorize]
 	[OpenApiOperation(operationId: "DeleteDepartment", tags: new[] { "Department" })]
 	[OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
-	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Delete result.")]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Delete result.")]
 	[Function("DeleteDepartment")]
 	public IActionResult DeleteDepartment([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "department/{id}")] HttpRequestData req, string id)
 		=> new OkObjectResult(_dataverseService.DeleteDepartment(id));
@@ -85,12 +94,15 @@ public class DataverseFunction(IDataverseService _dataverseService)
 
 	//[Authorize]
 	[OpenApiOperation(operationId: "CreateEmployee", tags: new[] { "Employee" })]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Employee create payload")]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "Created employee.")]
 	[Function("CreateEmployee")]
 	public async Task<IActionResult> CreateEmployee([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "employee")] HttpRequestData req)
 	{
-		var data = await req.ReadFromJsonAsync<Dictionary<string, object>>();
+		var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
 		var result = _dataverseService.CreateEmployee(
 			data["id"].ToString(),
 			data["code"].ToString(),
@@ -103,12 +115,15 @@ public class DataverseFunction(IDataverseService _dataverseService)
 
 	//[Authorize]
 	[OpenApiOperation(operationId: "UpdateEmployee", tags: new[] { "Employee" })]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Employee update payload")]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
 	[Function("UpdateEmployee")]
 	public async Task<IActionResult> UpdateEmployee([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "employee/{id}")] HttpRequestData req, string id)
 	{
-		var data = await req.ReadFromJsonAsync<Dictionary<string, object>>();
+        var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
 		var result = _dataverseService.UpdateEmployee(
 			id,
 			data["name"].ToString(),
@@ -120,6 +135,8 @@ public class DataverseFunction(IDataverseService _dataverseService)
 
 	//[Authorize]
 	[OpenApiOperation(operationId: "DeleteEmployee", tags: new[] { "Employee" })]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
 	[OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Delete result.")]
 	[Function("DeleteEmployee")]
@@ -152,12 +169,15 @@ public class DataverseFunction(IDataverseService _dataverseService)
 
 	//[Authorize]
 	[OpenApiOperation(operationId: "CreateTask", tags: new[] { "Task" })]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Task create payload")]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(object), Description = "Created task.")]
 	[Function("CreateTask")]
 	public async Task<IActionResult> CreateTask([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "task")] HttpRequestData req)
 	{
-		var data = await req.ReadFromJsonAsync<Dictionary<string, object>>();
+		var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
 		var result = _dataverseService.CreateTask(
 			data["id"].ToString(),
 			data["name"].ToString(),
@@ -171,11 +191,14 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	//[Authorize]
 	[OpenApiOperation(operationId: "UpdateTask", tags: new[] { "Task" })]
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Task update payload")]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
 	[Function("UpdateTask")]
 	public async Task<IActionResult> UpdateTask([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "task/{id}")] HttpRequestData req, string id)
 	{
-		var data = await req.ReadFromJsonAsync<Dictionary<string, object>>();
+		var body = await new StreamReader(req.Body).ReadToEndAsync();
+        var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(body);
 		var result = _dataverseService.UpdateTask(
 			id,
 			data["name"].ToString(),
@@ -188,6 +211,8 @@ public class DataverseFunction(IDataverseService _dataverseService)
 
 	//[Authorize]
 	[OpenApiOperation(operationId: "DeleteTask", tags: new[] { "Task" })]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
 	[OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Delete result.")]
 	[Function("DeleteTask")]

@@ -13,9 +13,9 @@ public class ConfigureService
     public static void Configure(IServiceCollection services)
     {
 
-        services.AddSingleton<IGreeterService, GreeterService>();
-        services.AddSingleton<IProductService, ProductService>();
-        services.AddSingleton<IDataverseService, DataverseService>();
+        services.AddScoped<IGreeterService, GreeterService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IDataverseService, DataverseService>();
 
         services.AddSingleton((serviceProvider) =>
         {

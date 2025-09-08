@@ -1,10 +1,12 @@
 using System.Security.Claims;
+using AzureFunctionApp.Core.Providers;
 using AzureFunctionApp.Functions.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace AzureFunctionApp.Functions.Middlewares;
@@ -17,6 +19,8 @@ public class AuthorizeMiddleware : IFunctionsWorkerMiddleware
 
         if (httpContext != null)
         {
+            ServiceClientProvier serviceClientProvier = httpContext.RequestServices.GetRequiredService<ServiceClientProvier>();
+            serviceClientProvier.accessToken = GetToken(httpContext, false);
             AuthorizeAttribute? authorizeAttribute = AuthUtils.GetAttribute<AuthorizeAttribute>(context);
             IEnumerable<Claim>? rolesClaim = httpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role);
             if (!IsAllowed(rolesClaim, authorizeAttribute))
@@ -27,6 +31,14 @@ public class AuthorizeMiddleware : IFunctionsWorkerMiddleware
         }
 
         await next(context);
+    }
+
+    private string? GetToken(HttpContext httpContext, bool includingBearerPrefix = true)
+    {
+        string? authorization = httpContext.Request.Headers["Authorization"].FirstOrDefault();
+        if (string.IsNullOrEmpty(authorization)) return null;
+        if (includingBearerPrefix) return authorization;
+        return authorization.StartsWith("Bearer ") ? authorization["Bearer ".Length..] : authorization;
     }
 
     private bool IsAllowed(IEnumerable<Claim>? rolesClaim, AuthorizeAttribute? authorizeAttribute)
