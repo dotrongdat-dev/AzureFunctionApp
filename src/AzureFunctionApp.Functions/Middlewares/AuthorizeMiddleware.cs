@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using AzureFunctionApp.Core.Providers;
+using AzureFunctionApp.Infrastructure.Providers;
 using AzureFunctionApp.Functions.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

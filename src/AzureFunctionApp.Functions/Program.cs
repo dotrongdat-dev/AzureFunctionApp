@@ -15,9 +15,12 @@ var services = builder.Services
     .ConfigureFunctionsApplicationInsights();
 
 ConfigureKeyVaultClient.Configure(services);
-ConfigureService.Configure(services);
 ConfigureDataverseServiceClient.Configure(services);
+ConfigureService.ConfigureSingleton(services);
+ConfigureRepository.Configure(services);
+ConfigureService.Configure(services);
 ConfigureCosmosClient.Configure(services);
 ConfigureAuthentication.Configure(services);
+ConfigureDataverseEntityDefinition.Configure();
 
 builder.Build().Run();
