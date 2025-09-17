@@ -1,5 +1,5 @@
-using AzureFunctionApp.Core.Providers;
 using AzureFunctionApp.Core.Services.Interfaces;
+using AzureFunctionApp.Infrastructure.Providers;
 using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 

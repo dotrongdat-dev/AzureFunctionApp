@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AzureFunctionApp.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22edb2103793938f0c6674c72ec50e09e34b661e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c796020e8753ebc6195ca65e6a922e4dd1126c23")]
 [assembly: System.Reflection.AssemblyProductAttribute("AzureFunctionApp.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AzureFunctionApp.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
