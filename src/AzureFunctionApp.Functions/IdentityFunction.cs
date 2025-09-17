@@ -105,7 +105,7 @@ public class IdentityFunction
     [OpenApiRequestBody("application/json", typeof(ExtensionRequest), Description = "Extension request payload", Required = true)]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExtensionResponse), Description = "System user.")]
     [Function("ProvideCustomClaims")]
-    public async Task<IActionResult> ProvideCustomClaims([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "extension-authentication/custom-claims")] HttpRequestData req)
+    public async Task<IActionResult> ProvideCustomClaims([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "extension-authentication/custom-claims")] HttpRequestData req)
     {
         var body = await new StreamReader(req.Body).ReadToEndAsync();
         var extensionRequest = JsonConvert.DeserializeObject<ExtensionRequest>(body);
