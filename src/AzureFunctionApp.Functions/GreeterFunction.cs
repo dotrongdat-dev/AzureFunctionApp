@@ -22,21 +22,39 @@ public class GreeterFunction(
 {
 
     [Authorize(Roles = "Employee")]
-    [OpenApiOperation(operationId: "Greeter")]
+    [OpenApiOperation(operationId: "GreeterForEmployee")]
     [OpenApiParameter(name: "name", Type = typeof(string), In = ParameterLocation.Query)]
     [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
         Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string),
             Description = "The OK response message containing a JSON result.")]
-    [Function("Greeter")]
-    public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData req)
+    [Function("GreeterForEmployee")]
+    public IActionResult GreeterEmployee([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "greeter/employee")] HttpRequestData req)
     {
         string? name = req.Query["name"];
         if (string.IsNullOrEmpty(name))
         {
             return new BadRequestObjectResult("Please provide a name in the query string.");
         }
-        else return new OkObjectResult(_greeterService.Greet(name));
+        else return new OkObjectResult($"GreeterForEmployee: {_greeterService.Greet(name)}");
+    }
+
+    [Authorize(Roles = "Customer")]
+    [OpenApiOperation(operationId: "GreeterForCustomer")]
+    [OpenApiParameter(name: "name", Type = typeof(string), In = ParameterLocation.Query)]
+    [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
+        Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string),
+            Description = "The OK response message containing a JSON result.")]
+    [Function("GreeterForCustomer")]
+    public IActionResult GreeterCustomer([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "greeter/customer")] HttpRequestData req)
+    {
+        string? name = req.Query["name"];
+        if (string.IsNullOrEmpty(name))
+        {
+            return new BadRequestObjectResult("Please provide a name in the query string.");
+        }
+        else return new OkObjectResult($"GreeterForCustomer: {_greeterService.Greet(name)}");
     }
 
     [Authorize]

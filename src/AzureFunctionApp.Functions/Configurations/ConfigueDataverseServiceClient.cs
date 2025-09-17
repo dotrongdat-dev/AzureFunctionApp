@@ -1,4 +1,4 @@
-using AzureFunctionApp.Core.Providers;
+using AzureFunctionApp.Infrastructure.Providers;
 using AzureFunctionApp.Functions.Helpers;
 using AzureFunctionApp.Infrastructure.Models.Dtos;
 using Microsoft.Extensions.DependencyInjection;

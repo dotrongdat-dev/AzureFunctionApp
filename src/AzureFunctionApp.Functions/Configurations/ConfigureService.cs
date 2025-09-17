@@ -1,8 +1,11 @@
 using Azure.Security.KeyVault.Secrets;
+using AzureFunctionApp.Core.Services;
 using AzureFunctionApp.Core.Services.Implementations;
+using AzureFunctionApp.Core.Services.Implemetations;
 using AzureFunctionApp.Core.Services.Interfaces;
 using AzureFunctionApp.Functions.Helpers;
 using AzureFunctionApp.Infrastructure.Models.Dtos;
+using AzureFunctionApp.Infrastructure.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,11 +15,17 @@ public class ConfigureService
 {
     public static void Configure(IServiceCollection services)
     {
-
         services.AddScoped<IGreeterService, GreeterService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IDataverseService, DataverseService>();
+        services.AddScoped<IEntraUserService, EntraUserService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<ISystemUserService, SystemUserService>();
+        services.AddScoped<ClaimProvider>();
+    }
 
+    public static void ConfigureSingleton(IServiceCollection services)
+    {
         services.AddSingleton((serviceProvider) =>
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();

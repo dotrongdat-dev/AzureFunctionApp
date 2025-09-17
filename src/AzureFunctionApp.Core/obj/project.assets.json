@@ -2074,6 +2074,7 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "Microsoft.Azure.Cosmos": "3.53.0",
+          "Microsoft.PowerPlatform.Dataverse.Client": "1.2.10",
           "Newtonsoft.Json": "13.0.3"
         },
         "compile": {

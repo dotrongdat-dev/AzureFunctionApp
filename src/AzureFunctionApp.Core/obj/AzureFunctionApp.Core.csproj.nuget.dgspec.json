@@ -117,6 +117,10 @@
               "target": "Package",
               "version": "[3.53.0, )"
             },
+            "Microsoft.PowerPlatform.Dataverse.Client": {
+              "target": "Package",
+              "version": "[1.2.10, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
