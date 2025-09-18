@@ -48,6 +48,7 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Department update payload")]
     [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
         Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
 	[Function("UpdateDepartment")]
 	public async Task<IActionResult> UpdateDepartment([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "department/{id}")] HttpRequestData req, string id)
@@ -117,7 +118,8 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	[OpenApiOperation(operationId: "UpdateEmployee", tags: new[] { "Employee" })]
     [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
         Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
-	[OpenApiRequestBody("application/json", typeof(object), Description = "Employee update payload")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
+    [OpenApiRequestBody("application/json", typeof(object), Description = "Employee update payload")]
 	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
 	[Function("UpdateEmployee")]
 	public async Task<IActionResult> UpdateEmployee([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "employee/{id}")] HttpRequestData req, string id)
@@ -193,7 +195,8 @@ public class DataverseFunction(IDataverseService _dataverseService)
 	[OpenApiRequestBody("application/json", typeof(object), Description = "Task update payload")]
     [OpenApiSecurity(schemeType: SecuritySchemeType.Http, schemeName: "Bearer",
         Scheme = Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums.OpenApiSecuritySchemeType.Bearer, BearerFormat = "JWT")]
-	[OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
+    [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(bool), Description = "Update result.")]
 	[Function("UpdateTask")]
 	public async Task<IActionResult> UpdateTask([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "task/{id}")] HttpRequestData req, string id)
 	{
