@@ -5,7 +5,7 @@ namespace AzureFunctionApp.Infrastructure.Models.Dtos.ExtensionAuthentication.Ex
 public class Action
 {
     [JsonProperty("@odata.type")]
-    public static string ODataType { get; } = "microsoft.graph.tokenIssuanceStart.provideClaimsForToken";
+    public string ODataType { get; } = "microsoft.graph.tokenIssuanceStart.provideClaimsForToken";
     [JsonProperty("claims")]
     public Claims Claims { get; set; } = new();
 }
