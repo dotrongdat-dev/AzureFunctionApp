@@ -19,7 +19,7 @@ public class AuthorizeMiddleware : IFunctionsWorkerMiddleware
 
         if (httpContext != null)
         {
-            if (true == httpContext.Request.Path.Value?.Contains("extension-authentication"))
+            if (false == httpContext.Request.Path.Value?.Contains("extension-authentication"))
             {
                 ServiceClientProvier serviceClientProvier = httpContext.RequestServices.GetRequiredService<ServiceClientProvier>();
                 serviceClientProvier.accessToken = GetToken(httpContext, false);
