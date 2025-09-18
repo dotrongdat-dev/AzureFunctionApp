@@ -19,8 +19,11 @@ public class AuthorizeMiddleware : IFunctionsWorkerMiddleware
 
         if (httpContext != null)
         {
-            ServiceClientProvier serviceClientProvier = httpContext.RequestServices.GetRequiredService<ServiceClientProvier>();
-            serviceClientProvier.accessToken = GetToken(httpContext, false);
+            if (false == httpContext.Request.Path.Value?.Contains("extension-authentication"))
+            {
+                ServiceClientProvier serviceClientProvier = httpContext.RequestServices.GetRequiredService<ServiceClientProvier>();
+                serviceClientProvier.accessToken = GetToken(httpContext, false);
+            }
             AuthorizeAttribute? authorizeAttribute = AuthUtils.GetAttribute<AuthorizeAttribute>(context);
             IEnumerable<Claim>? rolesClaim = httpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role);
             if (!IsAllowed(rolesClaim, authorizeAttribute))
