@@ -1,11 +1,11 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace AzureFunctionApp.Infrastructure.Models.Dtos.ExtensionAuthentication.ExtensionResponse;
 
 public class Action
 {
-    [JsonProperty("@odata.type")]
+    [JsonPropertyName("@odata.type")]
     public string ODataType { get; } = "microsoft.graph.tokenIssuanceStart.provideClaimsForToken";
-    [JsonProperty("claims")]
+    [JsonPropertyName("claims")]
     public Claims Claims { get; set; } = new();
 }

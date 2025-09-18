@@ -1,9 +1,12 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
-namespace AzureFunctionApp.Infrastructure.Models.Dtos.ExtensionAuthentication.ExtensionResponse;
-
-public class ExtensionResponse
+namespace AzureFunctionApp.Infrastructure.Models.Dtos.ExtensionAuthentication.ExtensionResponse
 {
-    [JsonProperty("data")]
-    public ExtensionResponseData Data { get; set; } = new();
+    public class ExtensionResponseData
+    {
+        [JsonPropertyName("@odata.type")]
+        public string ODataType { get; } = "microsoft.graph.onTokenIssuanceStartResponseData";
+        [JsonPropertyName("actions")]
+        public List<Action> Actions { get; set; } = new List<Action>();
+    }
 }
