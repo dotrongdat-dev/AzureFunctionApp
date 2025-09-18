@@ -1,9 +1,9 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace AzureFunctionApp.Infrastructure.Models.Dtos.ExtensionAuthentication.ExtensionResponse;
 
 public class ExtensionResponse
 {
-    [JsonProperty("data")]
+    [JsonPropertyName("data")]
     public ExtensionResponseData Data { get; set; } = new();
 }
