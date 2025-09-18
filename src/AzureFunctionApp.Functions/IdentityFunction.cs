@@ -107,8 +107,16 @@ public class IdentityFunction
     [Function("ProvideCustomClaims")]
     public async Task<IActionResult> ProvideCustomClaims([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "extension-authentication/custom-claims")] HttpRequestData req)
     {
-        var body = await new StreamReader(req.Body).ReadToEndAsync();
-        var extensionRequest = JsonConvert.DeserializeObject<ExtensionRequest>(body);
-        return new OkObjectResult(_claimProvider.GetCustomClaims(extensionRequest ?? throw new BadHttpRequestException("Body must be not null")));
+        try
+        {
+            var body = await new StreamReader(req.Body).ReadToEndAsync();
+            var extensionRequest = JsonConvert.DeserializeObject<ExtensionRequest>(body);
+            return new OkObjectResult(_claimProvider.GetCustomClaims(extensionRequest ?? throw new BadHttpRequestException("Body must be not null")));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error at ProvideCustomClaims {ex}", ex);
+            throw;
+        }
     }
 }
